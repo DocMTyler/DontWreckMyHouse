@@ -6,6 +6,5 @@ namespace DontWreckMyHouse.Core.Interfaces
     public interface IHostLocationRepository
     {
         List<HostLocation> GetAll();
-        List<HostLocation> GetByState(string state);
     }
 }

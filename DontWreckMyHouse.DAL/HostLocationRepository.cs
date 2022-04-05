@@ -47,11 +47,6 @@ namespace DontWreckMyHouse.DAL
             return hosts;
         }
 
-        public List<HostLocation> GetByState(string state)
-        {
-            return GetAll().Where(h => h.State == state.ToUpper()).ToList();
-        }
-
         private HostLocation Deserialize(string[] fields)
         {
             if (fields.Length != 6)
