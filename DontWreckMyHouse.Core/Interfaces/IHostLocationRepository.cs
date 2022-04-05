@@ -1,10 +1,11 @@
 ﻿using DontWreckMyHouse.Core.Models;
+using System.Collections.Generic;
 
 namespace DontWreckMyHouse.Core.Interfaces
 {
     public interface IHostLocationRepository
     {
-        HostLocation Get(string query);
-        bool Add(HostLocation host);
+        List<HostLocation> GetAll();
+        List<HostLocation> GetByState(string state);
     }
 }

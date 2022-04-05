@@ -5,10 +5,9 @@ namespace DontWreckMyHouse.Core.Interfaces
 {
     public interface IReservationRepository
     {
-        List<Reservation> GetAll();
-        Reservation Get(string name);
-        bool Add(Reservation reservation);
-        bool Update(Reservation reservation);
-        bool Delete(Reservation reservation);
+        List<Reservation> GetReservationsByHost(HostLocation host);
+        bool Add(HostLocation host, Reservation reservation);
+        bool Update(HostLocation host, Reservation reservation);
+        bool Delete(HostLocation host, Reservation reservation);
     }
 }

@@ -1,10 +1,11 @@
 ﻿using DontWreckMyHouse.Core.Models;
+using System.Collections.Generic;
 
 namespace DontWreckMyHouse.Core.Interfaces
 {
     public interface IGuestRepository
     {
-        Guest Get(string query);
-        bool Add(Guest guest);
+        List<Guest> GetByState(string state);
+        List<Guest> GetAll();
     }
 }

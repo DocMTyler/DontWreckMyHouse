@@ -7,7 +7,7 @@ namespace DontWreckMyHouse.Core.Models
         public int ID { get; set; }
         public DateTime InDate { get; set; }
         public DateTime OutDate { get; set; }
-        public Guest Guest { get; set; }
-        public HostLocation Host { get; set; }
+        public int GuestID { get; set; }
+        public decimal TotalCost { get; set; }
     }
 }

@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Ninject;
+using DontWreckMyHouse.BLL;
+using System.IO;
 using DontWreckMyHouse.Core.Interfaces;
 using DontWreckMyHouse.DAL;
-using DontWreckMyHouse.BLL;
 
 namespace DontWreckMyHouse.UI
 {
@@ -21,7 +18,14 @@ namespace DontWreckMyHouse.UI
             kernel.Bind<ConsoleIO>().To<ConsoleIO>();
             kernel.Bind<View>().To<View>();
 
-            //kernel.Bind<IReservationRepository>().To<ReservationRepository>();
+            string projectDirectory = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.Parent.Parent.FullName;
+            string reservationDirectory = Path.Combine(projectDirectory, "DWMH_Date", "reservations");
+            string guestsFilePath = Path.Combine(projectDirectory, "DWMH_Date", "guests.csv");
+            string hostsFilePath = Path.Combine(projectDirectory, "DWMH_Date", "hosts.csv");
+
+            kernel.Bind<IReservationRepository>().To<ReservationRepository>().WithConstructorArgument(reservationDirectory);
+            kernel.Bind<IGuestRepository>().To<GuestRepository>().WithConstructorArgument(guestsFilePath);
+            kernel.Bind<IHostLocationRepository>().To<HostLocationRepository>().WithConstructorArgument(hostsFilePath);
 
             kernel.Bind<ReservationService>().To<ReservationService>();
             kernel.Bind<HostLocationService>().To<HostLocationService>();
