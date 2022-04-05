@@ -5,7 +5,6 @@ namespace DontWreckMyHouse.Core.Interfaces
 {
     public interface IGuestRepository
     {
-        List<Guest> GetByState(string state);
         List<Guest> GetAll();
     }
 }

@@ -47,11 +47,6 @@ namespace DontWreckMyHouse.DAL
             return guests;
         }
 
-        public List<Guest> GetByState(string state)
-        {
-            return GetAll().Where(g => g.State == state.ToUpper()).ToList();
-        }
-
         private Guest Deserialize(string[] fields)
         {
             if(fields.Length != 6)
