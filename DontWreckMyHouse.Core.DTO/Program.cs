@@ -1,9 +1,4 @@
-﻿using System;
-using Ninject;
-using System.IO;
-using DontWreckMyHouse.BLL;
-using DontWreckMyHouse.DAL;
-using DontWreckMyHouse.Core.Interfaces;
+﻿using Ninject;
 
 namespace DontWreckMyHouse.UI
 {
