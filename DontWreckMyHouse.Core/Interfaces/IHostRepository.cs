@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace DontWreckMyHouse.Core.Interfaces
 {
-    public interface IHostLocationRepository
+    public interface IHostRepository
     {
-        List<HostLocation> GetAll();
+        List<Host> GetAll();
     }
 }

@@ -25,10 +25,10 @@ namespace DontWreckMyHouse.UI
 
             kernel.Bind<IReservationRepository>().To<ReservationRepository>().WithConstructorArgument(reservationDirectory);
             kernel.Bind<IGuestRepository>().To<GuestRepository>().WithConstructorArgument(guestsFilePath);
-            kernel.Bind<IHostLocationRepository>().To<HostLocationRepository>().WithConstructorArgument(hostsFilePath);
+            kernel.Bind<IHostRepository>().To<HostRepository>().WithConstructorArgument(hostsFilePath);
 
             kernel.Bind<ReservationService>().To<ReservationService>();
-            kernel.Bind<HostLocationService>().To<HostLocationService>();
+            kernel.Bind<HostService>().To<HostService>();
             kernel.Bind<GuestService>().To<GuestService>();
         }
     }

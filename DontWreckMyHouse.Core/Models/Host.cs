@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DontWreckMyHouse.Core.Models
 {
-    public class HostLocation
+    public class Host
     {
         public string ID { get; set; }
         public string LastName { get; set; }

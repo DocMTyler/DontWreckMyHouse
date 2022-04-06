@@ -17,7 +17,7 @@ namespace DontWreckMyHouse.DAL
             this.directory = directory;
         }
 
-        public List<Reservation> GetReservationsByHost(HostLocation host)
+        public List<Reservation> GetReservationsByHost(Host host)
         {
             var reservations = new List<Reservation>();
             var path = GetFilePath(host.ID);
@@ -50,7 +50,7 @@ namespace DontWreckMyHouse.DAL
             return reservations;
         }
 
-        public bool Add(HostLocation host, Reservation reservation)
+        public bool Add(Host host, Reservation reservation)
         {
             List<Reservation> reservations = GetReservationsByHost(host);
             int beforeCount = reservations.Count;
@@ -61,7 +61,7 @@ namespace DontWreckMyHouse.DAL
             return beforeCount != afterCount;
         }
 
-        public bool Update(HostLocation host, Reservation reservation)
+        public bool Update(Host host, Reservation reservation)
         {
             List<Reservation> reservations = GetReservationsByHost(host);
             for(int i = 0; i < reservations.Count; i++)
@@ -76,7 +76,7 @@ namespace DontWreckMyHouse.DAL
             return false;
         }
 
-        public bool Delete(HostLocation host, Reservation reservation)
+        public bool Delete(Host host, Reservation reservation)
         {
             List<Reservation> reservations = GetReservationsByHost(host);
             for(int i = 0; i < reservations.Count; i++)

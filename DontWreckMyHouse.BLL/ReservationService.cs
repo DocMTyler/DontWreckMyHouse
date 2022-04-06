@@ -9,36 +9,36 @@ namespace DontWreckMyHouse.BLL
     {
         private readonly IReservationRepository reserveRepo;
         private readonly IGuestRepository guestRepo;
-        private readonly IHostLocationRepository hostRepo;
+        private readonly IHostRepository hostRepo;
 
-        public ReservationService(IReservationRepository reserveRepo, IGuestRepository guestRepo, IHostLocationRepository hostRepo)
+        public ReservationService(IReservationRepository reserveRepo, IGuestRepository guestRepo, IHostRepository hostRepo)
         {
             this.reserveRepo = reserveRepo;
             this.guestRepo = guestRepo;
             this.hostRepo = hostRepo;
         }
 
-        public bool Add(HostLocation host, Reservation reservation)
+        public bool Add(Host host, Reservation reservation)
         {
             return reserveRepo.Add(host, reservation);
         }
         
-        public List<Reservation> FindReservationsByHost(HostLocation host)
+        public List<Reservation> FindReservationsByHost(Host host)
         {
             return reserveRepo.GetReservationsByHost(ValidateHost(host));
         }
 
-        public bool Edit(HostLocation host, Reservation reservation)
+        public bool Edit(Host host, Reservation reservation)
         {
             return reserveRepo.Update(host, reservation);
         }
 
-        public bool Cancel(HostLocation host, Reservation reservation)
+        public bool Cancel(Host host, Reservation reservation)
         {
             return reserveRepo.Delete(host, reservation);
         }
 
-        private HostLocation ValidateHost(HostLocation host)
+        private Host ValidateHost(Host host)
         {
             var hostList = hostRepo.GetAll();
             foreach(var repoHost in hostList)
@@ -49,7 +49,7 @@ namespace DontWreckMyHouse.BLL
                 }
             }
             Console.WriteLine("Host not found");
-            return new HostLocation();
+            return new Host();
         }
     }
 }

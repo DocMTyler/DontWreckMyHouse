@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 
 namespace DontWreckMyHouse.BLL
 {
-    public class HostLocationService
+    public class HostService
     {
-        private readonly IHostLocationRepository repo;
+        private readonly IHostRepository repo;
 
-        public HostLocationService(IHostLocationRepository repository)
+        public HostService(IHostRepository repository)
         {
             this.repo = repository;
         }
 
-        public List<HostLocation> FindByState(string state)
+        public List<Host> FindByState(string state)
         {
             return repo.GetAll()
                 .Where(h => h.State == state.ToUpper())

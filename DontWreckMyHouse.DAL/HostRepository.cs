@@ -7,19 +7,19 @@ using DontWreckMyHouse.Core.Models;
 
 namespace DontWreckMyHouse.DAL
 {
-    public class HostLocationRepository : IHostLocationRepository
+    public class HostRepository : IHostRepository
     {
         private const string HEADER = "id,last_name,email,phone,address,city,state,postal_code,standard_rate,weekend_rate";
         private readonly string filePath;
 
-        public HostLocationRepository(string filePath)
+        public HostRepository(string filePath)
         {
             this.filePath = filePath;
         }
 
-        public List<HostLocation> GetAll()
+        public List<Host> GetAll()
         {
-            var hosts = new List<HostLocation>();
+            var hosts = new List<Host>();
             if (!File.Exists(filePath))
             {
                 return hosts;
@@ -38,7 +38,7 @@ namespace DontWreckMyHouse.DAL
             for (int i = 1; i < lines.Length; i++)
             {
                 string[] fields = lines[i].Split(",", StringSplitOptions.TrimEntries);
-                HostLocation host = Deserialize(fields);
+                Host host = Deserialize(fields);
                 if (host != null)
                 {
                     hosts.Add(host);
@@ -47,14 +47,14 @@ namespace DontWreckMyHouse.DAL
             return hosts;
         }
 
-        private HostLocation Deserialize(string[] fields)
+        private Host Deserialize(string[] fields)
         {
             if (fields.Length != 6)
             {
                 return null;
             }
 
-            HostLocation host = new HostLocation();
+            Host host = new Host();
             host.ID = fields[0];
             host.LastName = fields[1];
             host.Email = fields[2];
