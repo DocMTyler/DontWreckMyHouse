@@ -19,9 +19,9 @@ namespace DontWreckMyHouse.UI
             kernel.Bind<View>().To<View>();
 
             string projectDirectory = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.Parent.Parent.FullName;
-            string reservationDirectory = Path.Combine(projectDirectory, "DWMH_Date", "reservations");
-            string guestsFilePath = Path.Combine(projectDirectory, "DWMH_Date", "guests.csv");
-            string hostsFilePath = Path.Combine(projectDirectory, "DWMH_Date", "hosts.csv");
+            string reservationDirectory = Path.Combine(projectDirectory, "DWMH_Data", "reservations");
+            string guestsFilePath = Path.Combine(projectDirectory, "DWMH_Data", "guests.csv");
+            string hostsFilePath = Path.Combine(projectDirectory, "DWMH_Data", "hosts.csv");
 
             kernel.Bind<IReservationRepository>().To<ReservationRepository>().WithConstructorArgument(reservationDirectory);
             kernel.Bind<IGuestRepository>().To<GuestRepository>().WithConstructorArgument(guestsFilePath);
