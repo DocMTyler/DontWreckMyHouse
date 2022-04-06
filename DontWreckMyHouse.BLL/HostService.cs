@@ -17,6 +17,11 @@ namespace DontWreckMyHouse.BLL
             this.repo = repository;
         }
 
+        public Host FindHostByEmail(string email)
+        {
+            return repo.GetHostByEmail(email);
+        }
+
         public List<Host> FindByState(string state)
         {
             return repo.GetAll()

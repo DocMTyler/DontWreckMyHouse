@@ -3,6 +3,7 @@ using Ninject;
 using System.IO;
 using DontWreckMyHouse.BLL;
 using DontWreckMyHouse.DAL;
+using DontWreckMyHouse.Core.Interfaces;
 
 namespace DontWreckMyHouse.UI
 {
@@ -11,13 +12,16 @@ namespace DontWreckMyHouse.UI
         static void Main(string[] args)
         {
             string projectDirectory = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.Parent.Parent.FullName;
+            string reservationDirectory = Path.Combine(projectDirectory, "DWMH_Data", "reservations");
             string hostsFilePath = Path.Combine(projectDirectory, "DWMH_Data", "test", "hosts.csv");
-            HostRepository repo = new(hostsFilePath);
-            HostService service = new(repo);
+            IReservationRepository repo = new ReservationRepository(reservationDirectory);
+            IHostRepository hostRepo = new HostRepository(hostsFilePath);
+            HostService service = new(hostRepo);
             Console.WriteLine("Welcome to Do NOT Wreck My House!!");
-            foreach (var host in repo.GetAll())
+            
+            foreach (var reservation in repo.GetReservationsByHost(service.FindHostByEmail("eyearnes0@sfgate.com")))
             {
-                var hostName = String.Format($"{host.LastName}");
+                var hostName = String.Format($"{reservation.GuestID}");
                 Console.WriteLine(hostName);
             }
             

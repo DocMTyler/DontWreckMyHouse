@@ -8,6 +8,7 @@ namespace DontWreckMyHouse.DAL.Tests
     {
         static string projectDirectory = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.Parent.Parent.FullName;
         static string hostsFilePath = Path.Combine(projectDirectory, "DWMH_Data", "test", "hosts.csv");
+        string hostEmail = "eyearnes0@sfgate.com";
         HostRepository hostRepo;
 
         [SetUp]
@@ -19,12 +20,19 @@ namespace DontWreckMyHouse.DAL.Tests
             }
 
             hostRepo = new HostRepository(hostsFilePath);
+            
         }
 
         [Test]
         public void GetAllShouldReturn1000Count()
         {
             Assert.AreEqual(1000, hostRepo.GetAll().Count);
+        }
+
+        [Test]
+        public void GetHostByEmail()
+        {
+            Assert.AreEqual(hostEmail, hostRepo.GetHostByEmail(hostEmail).Email);
         }
     }
 }

@@ -46,6 +46,20 @@ namespace DontWreckMyHouse.DAL
             return hosts;
         }
 
+        public Host GetHostByEmail(string email)
+        {
+            List<Host> hostList = GetAll();
+            foreach(var host in hostList)
+            {
+                if(host.Email == email)
+                {
+                    return host;
+                }
+            }
+            Console.WriteLine("Host not found");
+            return new Host();
+        }
+
         private Host Deserialize(string[] fields)
         {
             if (fields.Length != 10)

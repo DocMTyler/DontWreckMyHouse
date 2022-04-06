@@ -55,6 +55,8 @@ namespace DontWreckMyHouse.DAL
             List<Reservation> reservations = GetReservationsByHost(host);
             int beforeCount = reservations.Count;
             reservation.ID = reservations.Max(r => r.ID) + 1;
+            reservation.InDate = DateTime.Parse(reservation.InDate.ToString("MM/dd/yyyy"));
+            reservation.OutDate = DateTime.Parse(reservation.OutDate.ToString("MM/dd/yyyy"));
             reservations.Add(reservation);
             int afterCount = reservations.Count;
             Write(reservations, host.ID);
@@ -98,7 +100,7 @@ namespace DontWreckMyHouse.DAL
 
         private string Serialize(Reservation reservation)
         {
-            return string.Format("{0},{1:dd/MM/yyyy},{2:dd/MM/yyyy},{3},{4:0.00}",
+            return string.Format("{0},{1:MM/dd/yyyy},{2:MM/dd/yyyy},{3},{4:0.00}",
                     reservation.ID,
                     reservation.InDate,
                     reservation.OutDate,
