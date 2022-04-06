@@ -18,22 +18,38 @@ namespace DontWreckMyHouse.BLL
             this.hostRepo = hostRepo;
         }
 
+        public bool Add(HostLocation host, Reservation reservation)
+        {
+            return reserveRepo.Add(host, reservation);
+        }
+        
         public List<Reservation> FindReservationsByHost(HostLocation host)
         {
-            return ValidateHost(host) ? reserveRepo.GetReservationsByHost(host) : new List<Reservation>();
+            return reserveRepo.GetReservationsByHost(ValidateHost(host));
         }
 
-        public bool ValidateHost(HostLocation host)
+        public bool Edit(HostLocation host, Reservation reservation)
+        {
+            return reserveRepo.Update(host, reservation);
+        }
+
+        public bool Cancel(HostLocation host, Reservation reservation)
+        {
+            return reserveRepo.Delete(host, reservation);
+        }
+
+        private HostLocation ValidateHost(HostLocation host)
         {
             var hostList = hostRepo.GetAll();
             foreach(var repoHost in hostList)
             {
                 if(host.ID == repoHost.ID)
                 {
-                    return true;
+                    return repoHost;
                 }
             }
-            return false;
+            Console.WriteLine("Host not found");
+            return new HostLocation();
         }
     }
 }
