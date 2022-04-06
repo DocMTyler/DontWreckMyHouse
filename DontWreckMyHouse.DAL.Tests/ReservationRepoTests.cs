@@ -10,12 +10,10 @@ namespace DontWreckMyHouse.DAL.Tests
     {
         static string projectDirectory = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.Parent.Parent.FullName;
         static string reservationsDirectory = Path.Combine(projectDirectory, "DWMH_Data", "test", "reservations");
-        static string guestsFilePath = Path.Combine(projectDirectory, "DWMH_Data", "test", "guests.csv");
         static string hostsFilePath = Path.Combine(projectDirectory, "DWMH_Data", "test", "hosts.csv");
 
         ReservationRepository reserveRepo;
         HostRepository hostRepo;
-        GuestRepository guestRepo;
 
         List<Reservation> testReservationsList = new();
         Reservation testReservation;
@@ -30,7 +28,6 @@ namespace DontWreckMyHouse.DAL.Tests
 
             reserveRepo = new ReservationRepository(reservationsDirectory);
             hostRepo = new HostRepository(hostsFilePath);
-            guestRepo = new GuestRepository(guestsFilePath);
            
             testReservationsList = reserveRepo.GetReservationsByHost(hostRepo.GetHostByEmail("eyearnes0@sfgate.com"));
             testReservation = testReservationsList[0];
