@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using DontWreckMyHouse.Core.Interfaces;
 using DontWreckMyHouse.Core.Models;
 
@@ -49,7 +48,7 @@ namespace DontWreckMyHouse.DAL
 
         private Host Deserialize(string[] fields)
         {
-            if (fields.Length != 6)
+            if (fields.Length != 10)
             {
                 return null;
             }

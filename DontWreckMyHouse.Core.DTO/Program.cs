@@ -11,14 +11,14 @@ namespace DontWreckMyHouse.UI
         static void Main(string[] args)
         {
             string projectDirectory = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.Parent.Parent.FullName;
-            string guestsFilePath = Path.Combine(projectDirectory, "DWMH_Data", "test", "guests.csv");
-            GuestRepository repo = new(guestsFilePath);
-            GuestService service = new(repo);
+            string hostsFilePath = Path.Combine(projectDirectory, "DWMH_Data", "test", "hosts.csv");
+            HostRepository repo = new(hostsFilePath);
+            HostService service = new(repo);
             Console.WriteLine("Welcome to Do NOT Wreck My House!!");
-            foreach (var guest in repo.GetAll())
+            foreach (var host in repo.GetAll())
             {
-                var guestName = String.Format($"{guest.LastName}");
-                Console.WriteLine(guestName);
+                var hostName = String.Format($"{host.LastName}");
+                Console.WriteLine(hostName);
             }
             
             Console.WriteLine(projectDirectory);
