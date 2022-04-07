@@ -55,8 +55,6 @@ namespace DontWreckMyHouse.DAL
             List<Reservation> reservations = GetReservationsByHost(host);
             int beforeCount = reservations.Count;
             reservation.ID = reservations.Max(r => r.ID) + 1;
-            reservation.InDate = DateTime.Parse(reservation.InDate.ToString("MM/dd/yyyy"));
-            reservation.OutDate = DateTime.Parse(reservation.OutDate.ToString("MM/dd/yyyy"));
             reservations.Add(reservation);
             int afterCount = reservations.Count;
             Write(reservations, host.ID);
