@@ -25,7 +25,7 @@ namespace DontWreckMyHouse.BLL
         
         public List<Reservation> FindReservationsByHost(Host host)
         {
-            return reserveRepo.GetReservationsByHost(ValidateHost(host));
+            return reserveRepo.GetReservationsByHost(host);
         }
 
         public bool Edit(Host host, Reservation reservation)
