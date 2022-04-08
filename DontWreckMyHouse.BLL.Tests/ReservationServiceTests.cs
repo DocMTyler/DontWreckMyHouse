@@ -54,9 +54,9 @@ namespace DontWreckMyHouse.BLL.Tests
 
             reservation = new Reservation
             {
-                ID = 1,
-                InDate = DateTime.Parse("7/31/2021"),
-                OutDate = DateTime.Parse("8/31/2021"),
+                ID = 2,
+                InDate = DateTime.Parse("7/31/2022"),
+                OutDate = DateTime.Parse("8/31/2022"),
                 GuestID = 640,
                 TotalCost = 2550m
             };
@@ -67,7 +67,7 @@ namespace DontWreckMyHouse.BLL.Tests
         {
             var foundHost = service.FindReservationsByHost(host);
             var ID = foundHost[0].ID;
-            Assert.AreEqual(1, ID);
+            Assert.AreEqual(3, ID);
         }
         
         [Test]

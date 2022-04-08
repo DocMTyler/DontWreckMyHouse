@@ -22,6 +22,20 @@ namespace DontWreckMyHouse.BLL
         {
             return reserveRepo.Add(host, reservation);
         }
+
+        public Reservation FindReservationByID(Host host, int ID)
+        {
+            var reservationList = reserveRepo.GetReservationsByHost(host);
+            foreach(var reservation in reservationList)
+            {
+                if(reservation.ID == ID)
+                {
+                    return reservation;
+                }
+            }
+            Console.WriteLine("Could not find the reservation.");
+            return null;
+        }
         
         public List<Reservation> FindReservationsByHost(Host host)
         {
@@ -30,11 +44,29 @@ namespace DontWreckMyHouse.BLL
 
         public bool Edit(Host host, Reservation reservation)
         {
+            if (reservation.InDate > reservation.OutDate)
+            {
+                Console.WriteLine("Check In date cannot be after Check out date. Please choose different dates.");
+                return false;
+            }
+
+            if (reservation.InDate < DateTime.Now || reservation.OutDate < DateTime.Now)
+            {
+                Console.WriteLine("Dates must be in the future.");
+                return false;
+            }
+
             return reserveRepo.Update(host, reservation);
         }
 
         public bool Cancel(Host host, Reservation reservation)
         {
+            if(reservation.InDate < DateTime.Now)
+            {
+                Console.WriteLine("Cannot cancel a past reservation.");
+                return false;
+            }
+            
             return reserveRepo.Delete(host, reservation);
         }
 
@@ -43,6 +75,12 @@ namespace DontWreckMyHouse.BLL
             if(inDate > outDate)
             {
                 Console.WriteLine("Check In date cannot be after Check out date. Please choose different dates.");
+                return false;
+            }
+
+            if(inDate < DateTime.Now || outDate < DateTime.Now)
+            {
+                Console.WriteLine("Dates must be in the future.");
                 return false;
             }
             

@@ -3,8 +3,6 @@ using DontWreckMyHouse.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DontWreckMyHouse.UI
 {
@@ -70,18 +68,105 @@ namespace DontWreckMyHouse.UI
 
         private void CancelAReservation()
         {
-            throw new NotImplementedException();
+            view.DisplayHeader("Cancel a Reservation");
+            
+            //Choose host
+            Console.WriteLine("First, let's find the reservation by choosing a host...");
+            string state = view.GetState();
+            List<Host> hosts = hostService.FindByState(state);
+            if (hosts.Count == 0)
+            {
+                Console.WriteLine("No hosts found.");
+                return;
+            }
+            view.DisplayHosts(hosts);
+            string email = view.GetHostEmail(hosts);
+            if (string.IsNullOrEmpty(email)) return;
+            var host = hostService.FindHostByEmail(email);
+
+            //Display the reservations for that host, and ask for a reservation ID to select the reservation
+            List<Reservation> reservations = reservationService.FindReservationsByHost(host);
+            reservations = reservations.OrderByDescending(r => r.InDate).ToList();
+            view.DisplayFutureReservations(reservations);
+            var reservationID = view.GetReservationID();
+            var toDelete = reservationService.FindReservationByID(host, reservationID);
+
+            Console.WriteLine("Reservation ID | In Date | Out Date | Guest ID | Cost");
+            Console.WriteLine($"{toDelete.ID} | {toDelete.InDate:MM/dd/yyyy} | {toDelete.OutDate:MM/dd/yyyy} | {toDelete.GuestID} | ${toDelete.TotalCost}");
+
+            //Confirm cancel
+            Console.WriteLine("Are you sure you want to cancel this reservation?[y/n]");
+            var confirm = Console.ReadLine().ToLower();
+            if (confirm == "y")
+            {
+                reservationService.Cancel(host, toDelete);
+                Console.WriteLine("Reservation deleted");
+            }
+            else
+            {
+                Console.WriteLine("Reservation not deleted");
+            }
         }
 
         private void EditAReservation()
         {
-            throw new NotImplementedException();
+            view.DisplayHeader("Edit a Reservation");
+
+            //Choose host
+            Console.WriteLine("First, let's find the reservation by choosing a host...");
+            string state = view.GetState();
+            List<Host> hosts = hostService.FindByState(state);
+            if (hosts.Count == 0)
+            {
+                Console.WriteLine("No hosts found.");
+                return;
+            }
+            view.DisplayHosts(hosts);
+            string email = view.GetHostEmail(hosts);
+            if (string.IsNullOrEmpty(email)) return;
+            var host = hostService.FindHostByEmail(email);
+
+            //Display the reservations for that host, and ask for a reservation ID to select the reservation
+            List<Reservation> reservations = reservationService.FindReservationsByHost(host);
+            reservations = reservations.OrderByDescending(r => r.InDate).ToList();
+            view.DisplayFutureReservations(reservations);
+            var reservationID = view.GetReservationID();
+            var toEdit = reservationService.FindReservationByID(host, reservationID);
+
+            Console.WriteLine("Reservation ID | In Date | Out Date | Guest ID | Cost");
+            Console.WriteLine($"{toEdit.ID} | {toEdit.InDate:MM/dd/yyyy} | {toEdit.OutDate:MM/dd/yyyy} | {toEdit.GuestID} | ${toEdit.TotalCost}");
+
+            //Select the new dates
+            Console.WriteLine("Now, let's choose the new dates...");
+            toEdit.InDate = view.GetReservationInDate();
+            toEdit.OutDate = view.GetReservationOutDate();
+
+            //Calculate new total and confirm
+            var totalDays = (toEdit.OutDate - toEdit.InDate).Days;
+            var businessDays = reservationService.CalculateBusinessDays(toEdit.InDate, toEdit.OutDate);
+            var premiumDays = totalDays - businessDays;
+            toEdit.TotalCost = (businessDays * host.StandardRate) + (premiumDays * host.WeekendRate);
+
+            Console.WriteLine($"This reservation at {host.Address} in {host.City}, {host.State} will have the new dates from {toEdit.InDate:MM/dd/yyyy} - {toEdit.OutDate:MM/dd/yyyy}");
+            Console.WriteLine($"The total cost is ${toEdit.TotalCost}. Is this correct[y/n]?");
+
+            var confirm = Console.ReadLine().ToLower();
+            if (confirm == "y")
+            {
+                reservationService.Edit(host, toEdit);
+                Console.WriteLine("Reservation edited");
+            }
+            else
+            {
+                Console.WriteLine("Reservation not edited");
+            }
         }
 
         private void MakeAReservation()
         {
             view.DisplayHeader("Make a Reservation");
             
+            //Choose host
             Console.WriteLine("First, let's choose a host...");
             string state = view.GetState();
             List<Host> hosts = hostService.FindByState(state);
@@ -94,7 +179,11 @@ namespace DontWreckMyHouse.UI
             string email = view.GetHostEmail(hosts);
             if (string.IsNullOrEmpty(email)) return;
             var host = hostService.FindHostByEmail(email);
+            if (host == null) return;
+            var reservations = reservationService.FindReservationsByHost(host);
+            view.DisplayFutureReservations(reservations);
             
+            //Choose dates
             Console.WriteLine("Now, let's choose the dates...");
             var reservation = new Reservation();
             var inDate = view.GetReservationInDate();
@@ -108,6 +197,7 @@ namespace DontWreckMyHouse.UI
             reservation.OutDate = outDate;
             var totalDays = (outDate - inDate).Days;
             
+            //Choose guest
             Console.WriteLine("Now, let's choose a guest...");
             string guestState = view.GetState();
             List<Guest> guests = guestService.FindByState(guestState);
@@ -120,13 +210,11 @@ namespace DontWreckMyHouse.UI
             string guestEmail = view.GetGuestEmail(guests);
             if (string.IsNullOrEmpty(email)) return;
             var guest = guestService.FindGuestByEmail(guestEmail);
-            if (string.IsNullOrEmpty(guest.ToString()))
-            {
-                Console.WriteLine("Guest was not found");
-                return;
-            }
+            if (guest == null) return;
+            
             reservation.GuestID = guest.ID;
 
+            //Calculate total and confirm
             var businessDays = reservationService.CalculateBusinessDays(inDate, outDate);
             var premiumDays = totalDays - businessDays;
             reservation.TotalCost = (businessDays * host.StandardRate) + (premiumDays * host.WeekendRate);

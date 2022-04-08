@@ -26,7 +26,7 @@ namespace DontWreckMyHouse.BLL
                 }
             }
             Console.WriteLine("Guest not found");
-            return new Guest();
+            return null;
         }
 
         public List<Guest> FindByState(string state)

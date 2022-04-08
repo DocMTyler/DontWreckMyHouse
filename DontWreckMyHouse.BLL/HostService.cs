@@ -28,7 +28,7 @@ namespace DontWreckMyHouse.BLL
                 }
             }
             Console.WriteLine("Host not found");
-            return new Host();
+            return null;
         }
 
         public List<Host> FindByState(string state)

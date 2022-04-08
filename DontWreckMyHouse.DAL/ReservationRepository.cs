@@ -52,43 +52,69 @@ namespace DontWreckMyHouse.DAL
 
         public bool Add(Host host, Reservation reservation)
         {
-            List<Reservation> reservations = GetReservationsByHost(host);
-            int beforeCount = reservations.Count;
-            reservation.ID = reservations.Max(r => r.ID) + 1;
-            reservations.Add(reservation);
-            int afterCount = reservations.Count;
-            Write(reservations, host.ID);
-            return beforeCount != afterCount;
+            try
+            {
+                List<Reservation> reservations = GetReservationsByHost(host);
+                int beforeCount = reservations.Count;
+                reservation.ID = reservations.Max(r => r.ID) + 1;
+                reservations.Add(reservation);
+                int afterCount = reservations.Count;
+                Write(reservations, host.ID);
+                return beforeCount != afterCount;
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+            
         }
 
         public bool Update(Host host, Reservation reservation)
         {
-            List<Reservation> reservations = GetReservationsByHost(host);
-            for(int i = 0; i < reservations.Count; i++)
+            try
             {
-                if(reservations[i].ID == reservation.ID)
+                List<Reservation> reservations = GetReservationsByHost(host);
+                for (int i = 0; i < reservations.Count; i++)
                 {
-                    reservations[i] = reservation;
-                    Write(reservations, host.ID);
-                    return true;
+                    if (reservations[i].ID == reservation.ID)
+                    {
+                        reservations[i] = reservation;
+                        Write(reservations, host.ID);
+                        return true;
+                    }
                 }
+                return false;
             }
-            return false;
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
         }
 
         public bool Delete(Host host, Reservation reservation)
         {
-            List<Reservation> reservations = GetReservationsByHost(host);
-            for(int i = 0; i < reservations.Count; i++)
+            try
             {
-                if(reservations[i].ID == reservation.ID)
+                List<Reservation> reservations = GetReservationsByHost(host);
+                for (int i = 0; i < reservations.Count; i++)
                 {
-                    reservations.Remove(reservation);
-                    Write(reservations, host.ID);
-                    return true;
+                    if (reservations[i].ID == reservation.ID)
+                    {
+                        reservations.Remove(reservation);
+                        Write(reservations, host.ID);
+                        return true;
+                    }
                 }
+                return false;
             }
-            return false;
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+            
         }
 
         private string GetFilePath(string hostID)

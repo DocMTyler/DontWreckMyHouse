@@ -86,7 +86,6 @@ namespace DontWreckMyHouse.UI
                 io.PrintLine($"{reservation.ID} | {reservation.InDate:MM/dd/yyyy} | {reservation.OutDate:MM/dd/yyyy} | {reservation.GuestID} | ${reservation.TotalCost:0.00}");
             }
             EnterToContinue();
-            Console.Clear();
         }
 
         public DateTime GetReservationInDate()
@@ -97,6 +96,11 @@ namespace DontWreckMyHouse.UI
         public DateTime GetReservationOutDate()
         {
             return io.ReadDate("Enter the Check Out Date: ");
+        }
+
+        public int GetReservationID()
+        {
+            return io.ReadInt("Enter a Reservation ID: ");
         }
 
         public void DisplayGuests(List<Guest> guests)
@@ -122,6 +126,17 @@ namespace DontWreckMyHouse.UI
             }
             io.PrintLine("Guest email not found");
             return "";
+        }
+
+        public void DisplayFutureReservations(List<Reservation> reservations)
+        {
+            DisplayHeader("Reservation ID | In Date | Out Date | Guest ID | Cost");
+            var futureReservations = reservations.Where(r => r.InDate > DateTime.Now).ToList();
+            foreach (var reservation in futureReservations)
+            {
+                io.PrintLine($"{reservation.ID} | {reservation.InDate:MM/dd/yyyy} | {reservation.OutDate:MM/dd/yyyy} | {reservation.GuestID} | ${reservation.TotalCost:0.00}");
+            }
+            EnterToContinue();
         }
     }
 }
