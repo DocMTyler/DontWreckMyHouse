@@ -1,4 +1,5 @@
 ﻿using DontWreckMyHouse.BLL;
+using DontWreckMyHouse.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +29,8 @@ namespace DontWreckMyHouse.UI
             try
             {
                 RunMenu();
-            }catch(Exception e)
+            }
+            catch(Exception e)
             {
                 view.DisplayException(e);
             }
@@ -78,12 +80,90 @@ namespace DontWreckMyHouse.UI
 
         private void MakeAReservation()
         {
-            throw new NotImplementedException();
+            view.DisplayHeader("Make a Reservation");
+            
+            Console.WriteLine("First, let's choose a host...");
+            string state = view.GetState();
+            List<Host> hosts = hostService.FindByState(state);
+            if (hosts.Count == 0)
+            {
+                Console.WriteLine("No hosts found.");
+                return;
+            }
+            view.DisplayHosts(hosts);
+            string email = view.GetHostEmail(hosts);
+            if (string.IsNullOrEmpty(email)) return;
+            var host = hostService.FindHostByEmail(email);
+            
+            Console.WriteLine("Now, let's choose the dates...");
+            var reservation = new Reservation();
+            var inDate = view.GetReservationInDate();
+            var outDate = view.GetReservationOutDate();
+            while(!reservationService.ValiDate(inDate, outDate, host))
+            {
+                inDate = view.GetReservationInDate();
+                outDate = view.GetReservationOutDate();
+            }
+            reservation.InDate = inDate;
+            reservation.OutDate = outDate;
+            var totalDays = (outDate - inDate).Days;
+            
+            Console.WriteLine("Now, let's choose a guest...");
+            string guestState = view.GetState();
+            List<Guest> guests = guestService.FindByState(guestState);
+            if (guests.Count == 0)
+            {
+                Console.WriteLine("No guests found.");
+                return;
+            }
+            view.DisplayGuests(guests);
+            string guestEmail = view.GetGuestEmail(guests);
+            if (string.IsNullOrEmpty(email)) return;
+            var guest = guestService.FindGuestByEmail(guestEmail);
+            if (string.IsNullOrEmpty(guest.ToString()))
+            {
+                Console.WriteLine("Guest was not found");
+                return;
+            }
+            reservation.GuestID = guest.ID;
+
+            var businessDays = reservationService.CalculateBusinessDays(inDate, outDate);
+            var premiumDays = totalDays - businessDays;
+            reservation.TotalCost = (businessDays * host.StandardRate) + (premiumDays * host.WeekendRate);
+
+            Console.WriteLine($"{guest.FirstName} {guest.LastName} will be booked at {host.Address} in {host.City}, {host.State} from {inDate:MM/dd/yyyy} - {outDate:MM/dd/yyyy}");
+            Console.WriteLine($"The total cost is ${reservation.TotalCost}. Is this correct[y/n]?");
+            
+            var confirm = Console.ReadLine().ToLower();
+            if(confirm == "y")
+            {
+                reservationService.Add(host, reservation);
+                Console.WriteLine("Reservation added");
+            }
+            else
+            {
+                Console.WriteLine("Reservation not added");
+            }
         }
 
         private void ViewReservationsForHost()
         {
-            throw new NotImplementedException();
+            view.DisplayHeader("View Reservations by Host");
+            string state = view.GetState();
+            List<Host> hosts = hostService.FindByState(state);
+            if (hosts.Count == 0)
+            {
+                Console.WriteLine("No hosts found.");
+                return;
+            }
+            view.DisplayHosts(hosts);
+            string email = view.GetHostEmail(hosts);
+            if (string.IsNullOrEmpty(email)) return;
+            var host = hostService.FindHostByEmail(email);
+            
+            List<Reservation> reservations = reservationService.FindReservationsByHost(host);
+            reservations = reservations.OrderByDescending(r => r.InDate).ToList();
+            view.DisplayReservations(reservations);
         }
     }
 }

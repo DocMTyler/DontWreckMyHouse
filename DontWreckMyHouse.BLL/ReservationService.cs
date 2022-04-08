@@ -38,18 +38,39 @@ namespace DontWreckMyHouse.BLL
             return reserveRepo.Delete(host, reservation);
         }
 
-        private Host ValidateHost(Host host)
+        public bool ValiDate(DateTime inDate, DateTime outDate, Host host)
         {
-            var hostList = hostRepo.GetAll();
-            foreach(var repoHost in hostList)
+            if(inDate > outDate)
             {
-                if(host.ID == repoHost.ID)
+                Console.WriteLine("Check In date cannot be after Check out date. Please choose different dates.");
+                return false;
+            }
+            
+            var reservations = FindReservationsByHost(host);
+            foreach(var reservation in reservations)
+            {
+                if((inDate  > reservation.InDate && inDate.Date < reservation.OutDate) 
+                    || (outDate > reservation.InDate && outDate.Date < reservation.OutDate))
                 {
-                    return repoHost;
+
+                    Console.WriteLine("Those dates are already booked for another guest. Please choose different dates.");
+                        return false;
                 }
             }
-            Console.WriteLine("Host not found");
-            return new Host();
+            return true;
+        }
+
+        public int CalculateBusinessDays(DateTime inDate, DateTime outDate)
+        {
+            int businessDays = 0;
+            for(var day = inDate.Date; day.Date <= outDate.Date; day = day.AddDays(1))
+            {
+                if(day.DayOfWeek != DayOfWeek.Friday && day.DayOfWeek != DayOfWeek.Saturday && day.DayOfWeek != DayOfWeek.Sunday)
+                {
+                    businessDays++;
+                }
+            }
+            return businessDays;
         }
     }
 }

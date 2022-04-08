@@ -56,11 +56,11 @@ namespace DontWreckMyHouse.DAL
 
             Guest deGuest = new Guest();
             deGuest.ID = int.Parse(fields[0]);
-            deGuest.FirstName = fields[1];
-            deGuest.LastName = fields[2];
-            deGuest.Email = fields[3];
-            deGuest.Phone = fields[4];
-            deGuest.State = fields[5];
+            deGuest.FirstName = fields[1].Trim();
+            deGuest.LastName = fields[2].Trim();
+            deGuest.Email = fields[3].Trim();
+            deGuest.Phone = fields[4].Trim();
+            deGuest.State = fields[5].Trim();
             return deGuest;
         }
     }

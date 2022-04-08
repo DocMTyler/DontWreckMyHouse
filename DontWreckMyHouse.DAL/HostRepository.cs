@@ -68,13 +68,13 @@ namespace DontWreckMyHouse.DAL
             }
 
             Host host = new Host();
-            host.ID = fields[0];
-            host.LastName = fields[1];
-            host.Email = fields[2];
-            host.Phone = fields[3];
-            host.Address = fields[4];
-            host.City = fields[5];
-            host.State = fields[6];
+            host.ID = fields[0].Trim();
+            host.LastName = fields[1].Trim();
+            host.Email = fields[2].Trim();
+            host.Phone = fields[3].Trim();
+            host.Address = fields[4].Trim();
+            host.City = fields[5].Trim();
+            host.State = fields[6].Trim();
             host.PostalCode = int.Parse(fields[7]);
             host.StandardRate = decimal.Parse(fields[8]);
             host.WeekendRate = decimal.Parse(fields[9]);

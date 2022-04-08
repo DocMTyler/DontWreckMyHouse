@@ -19,7 +19,16 @@ namespace DontWreckMyHouse.BLL
 
         public Host FindHostByEmail(string email)
         {
-            return repo.GetHostByEmail(email);
+            List<Host> hostList = repo.GetAll();
+            foreach (var host in hostList)
+            {
+                if (host.Email == email)
+                {
+                    return host;
+                }
+            }
+            Console.WriteLine("Host not found");
+            return new Host();
         }
 
         public List<Host> FindByState(string state)
