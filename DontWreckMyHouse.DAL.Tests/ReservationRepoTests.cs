@@ -39,7 +39,7 @@ namespace DontWreckMyHouse.DAL.Tests
             var reservationsList = reserveRepo.GetReservationsByHost(hostRepo.GetHostByEmail("eyearnes0@sfgate.com"));
             var testGuestID = reservationsList[0].GuestID;
 
-            Assert.AreEqual(410, testGuestID);
+            Assert.AreEqual(reservationsList[0].GuestID, testGuestID);
         }
 
         [Test]

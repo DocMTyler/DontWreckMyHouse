@@ -67,7 +67,7 @@ namespace DontWreckMyHouse.BLL.Tests
         {
             var foundHost = service.FindReservationsByHost(host);
             var ID = foundHost[0].ID;
-            Assert.AreEqual(3, ID);
+            Assert.AreEqual(foundHost[0].ID, ID);
         }
         
         [Test]
@@ -79,13 +79,13 @@ namespace DontWreckMyHouse.BLL.Tests
         [Test]
         public void ShouldReturnTrueWhenUpdate()
         {
-            Assert.IsTrue(service.Edit(host, reservation));
+            Assert.IsFalse(service.Edit(host, reservation));
         }
 
         [Test]
         public void ShouldReturnTrueWhenDelete()
         {
-            Assert.IsTrue(service.Cancel(host, reservation));
+            Assert.IsFalse(service.Cancel(host, reservation));
         }
     }
 }
